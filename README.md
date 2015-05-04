@@ -1,12 +1,12 @@
 # LearnerooGem
 
-TODO: Write a gem description
+Outputs name of tests even when not in verbose mode, and prints check marks too!
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'learneroo_gem'
+    gem 'learneroo-gem'
 
 And then execute:
 
@@ -14,11 +14,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install learneroo_gem
+    $ gem install learneroo-gem
 
 ## Usage
 
-TODO: Write usage instructions here
+Install the gem. Then add `require 'learneroo_gem'` to the top of test_helper.rb in Rails.  
 
 ## Contributing
 
