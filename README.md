@@ -1,6 +1,7 @@
 # LearnerooGem
 
 Outputs name of tests even when not in verbose mode, and prints check marks too!
+
 New: Reports results to website. Need to setup API_URL and API_TOKEN as ENV variables.
 
 ## Installation

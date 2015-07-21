@@ -3,9 +3,10 @@ require "minitest"
 
 module Minitest
 	class ProgressReporter < Reporter
-    @@tests = 0
+    @@tests = 0 #counts passed tests (more general than test names)
 
-		def record result # :nodoc:
+    # modify test output
+		def record(result)
 			if options[:verbose]
 				io.print "%s#%s = %.2f s = " % [result.class, result.name, result.time]
 			else
@@ -17,25 +18,36 @@ module Minitest
       else
 				puts result.result_code
       end
-      report_results(result)
+      report_results(result, @@tests)
     end
 
-    # report results if wrong or last one.
-    def report_results(result)
+    # report results when wrong or last one
+    def report_results(result, score)
       api_token = ENV["API_TOKEN"]
-      #test_number = result.name[5..6]
-      if api_token && (result.result_code != '.' || @@tests == 42) #adjust
-        puts "Reporting results"
-        test_url = ENV["API_URL"]
+      test_url = ENV["API_URL"]
+      track_id = ENV["TRACK_ID"]
 
-        require "uri"
+      test_number = result.name[5..6]
+      if test_number == "58" #final test code
+        puts "Congratulations on passing the tests!"
+        passed_tests = true
+      end
+
+      if api_token && test_url && (result.result_code != '.' || passed_tests)
+        puts "Reporting results..."
         require "net/http"
-
-        params = {'test_number'=> @@tests,
-                  'api_token' => api_token
+        params = {'test_number'=> score,
+                  'api_token' => api_token,
+                  'track_id' => track_id
                 }
-        x = Net::HTTP.post_form(URI.parse(test_url), params)
-        puts x.body
+        begin
+          res = Net::HTTP.post_form(URI.parse(test_url), params)
+          if res.code == "200"
+            puts "Results successfully submitted to #{test_url}"
+          end
+        rescue
+          puts "Failed to submit results."
+        end
       end
     end
 
